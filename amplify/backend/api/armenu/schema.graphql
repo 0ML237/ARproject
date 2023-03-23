@@ -1,0 +1,47 @@
+# This "input" configures a global authorization rule to enable public access to
+# all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
+input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONLY!
+
+type Restaurant @model {
+  id: ID!
+  name: String!
+  adresse: String
+  email: AWSEmail!
+  localisation: String
+  contact:  AWSPhone!
+  
+  menus: [Menu] @hasMany
+},
+
+type Menu @model {
+  id: ID!
+  name: String!
+  price: Float!
+  description: String!
+  image: [File]
+  video: [File]
+  ingredients: [Ingredient]
+  category: Category!
+}
+
+type Ingredient {
+  name: String!
+  image: File!
+}
+
+type Category {
+  name: String!
+  subCategory: [Category!]
+}
+
+type File {
+  type: FILETYPE!
+  height: Int
+  width: Int
+  path: String!
+}
+
+enum  FILETYPE {
+  VIDEO
+  IMAGE
+}

@@ -1,0 +1,26 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-armenu-dev-160342-authRole",
+      "UnauthRoleArn": "arn:aws:iam::032561936498:role/amplify-armenu-dev-160342-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::032561936498:role/amplify-armenu-dev-160342-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-armenu-dev-160342-deployment",
+      "UnauthRoleName": "amplify-armenu-dev-160342-unauthRole",
+      "StackName": "amplify-armenu-dev-160342",
+      "StackId": "arn:aws:cloudformation:us-east-2:032561936498:stack/amplify-armenu-dev-160342/ebe026c0-c4d4-11ed-a92e-0a18c39b4f32",
+      "AmplifyAppId": "d2nhmv1ckb2u7g"
+    },
+    "categories": {
+      "auth": {
+        "armenud92359da": {}
+      },
+      "api": {
+        "armenu": {}
+      },
+      "storage": {
+        "armenustorage": {}
+      }
+    }
+  }
+}

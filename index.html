@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>ARMenu App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.0/dist/mindar-image-aframe.prod.js"></script>
+
+    <!-- css -->
+    <link rel="stylesheet" type="text/css" href="./css/dropDown.css" />
+
+    <!-- js -->
+    <script src="./js/menu-item.service.js"></script>
+    <script src="./js/menu-item.render.js"></script>
+    <!-- <script src="src/ARapp1/video/menu/plat1.mp4"></script> -->
+    <script>
+      window.onload = async function () {
+        const menuItems1 = await getMenuItems1();
+        const menuItems = getMenuItems();
+
+        let currenMenuItem = 0;
+        let currentProduitIndex = 0;
+        let currentPlatIndex = 0;
+
+        const v = document.querySelector("#water");
+        const btnPrev = document.querySelector("#portfolio-left-button");
+        const btnNext = document.querySelector("#portfolio-right-button");
+        const descriptionElement = document.querySelector("#videoDescrip");
+
+        // gestion des menus
+
+        const assets = document.querySelectorAll("a-assets");
+        const liste = document.querySelector("#list");
+        const platArea = menuItems[0];
+        renderCurrentPlat(currentPlatIndex);
+        menuItems.forEach((menu) =>
+          renderMenuItem(menu, liste, descriptionElement, (selectedProduit) => {
+            platArea.splice(
+              0,
+              platArea.length,
+              ...menuItems
+                .map((menuItem) => menuItem.produit)
+                .reduce((results, produits) => [...results, ...produits], [])
+                .filter((produit) => selectedProduit.name === produit.name)
+                .map((produit) => produit.plats)
+                .reduce((results, plats) => [...results, ...plats], [])
+            );
+            //currentPlatIndex = 0;
+            renderCurrentPlat((currentPlatIndex = 0));
+          })
+        );
+
+        function renderCurrentPlat(index) {
+          v.setAttribute("src", platArea[index].src);
+          descriptionElement.innerText = platArea[index].description;
+        }
+
+        //changer la video
+        btnPrev.addEventListener("click", function () {
+          if (currentPlatIndex === 0) {
+            return;
+          }
+
+          currentPlatIndex--;
+          renderCurrentPlat(currentPlatIndex);
+        });
+        btnNext.addEventListener("click", function () {
+          if (currentPlatIndex === platArea.length - 1) {
+            return;
+          }
+
+          currentPlatIndex++;
+          renderCurrentPlat(currentPlatIndex);
+        });
+
+        /*playButton.addEventListener("click", () => {
+          playButton.setAttribute("visible", false);
+            //v.play();
+        });*/
+
+        const scene = document.querySelector("a-scene");
+        let startX = 0;
+        let startY = 0;
+        let dist = 0;
+        let threshold = 50; // seuil de distance de détection de geste
+
+        scene.addEventListener("touchstart", function (e) {
+          e.preventDefault();
+          startX = e.changedTouches[0].pageX;
+          startY = e.changedTouches[0].pageY;
+        });
+
+        scene.addEventListener("touchend", function (e) {
+          e.preventDefault();
+          dist = e.changedTouches[0].pageX - startX;
+          if (Math.abs(dist) > threshold) {
+            if (dist < 0) {
+              // Balayage à gauche - Passer à la vidéo suivante
+              if (currentPlatIndex < platArea.length - 1) {
+                currentPlatIndex++;
+                renderCurrentPlat(currentPlatIndex);
+              }
+            } else {
+              // Balayage à droite - Passer à la vidéo précédente
+              if (currentPlatIndex > 0) {
+                currentPlatIndex--;
+                renderCurrentPlat(currentPlatIndex);
+              }
+            }
+          }
+        });
+
+        const dropdownP = document.querySelectorAll(".dropdown");
+
+        dropdownP.forEach((asset) => {
+          asset.addEventListener("click", () => {
+            if (!asset.classList.contains("active")) {
+              for (let count = 0; count < dropdownP.length; count++) {
+                if (dropdownP[count].classList.contains("active")) {
+                  dropdownP[count].classList.toggle("active");
+                }
+              }
+              asset.classList.toggle("active");
+            } else {
+              asset.classList.remove("active");
+            }
+          });
+        });
+        
+        const preview = document.querySelector("#paintandquest-preview-button");
+        const playicon = document.querySelector("#playicon")
+
+        AFRAME.registerComponent('mytarget', {
+          init() {
+              this.el.addEventListener('targetFound', () => {
+                  preview.addEventListener('click', () => {
+                    preview.setAttribute("visible", false);
+                    //playicon.setAttribute("visible", false);
+                    const video = document.querySelector("#paintandquest-video-webm");
+                    video.src = platArea[currentPlatIndex].src;
+
+                    v.setAttribute("scr", "#paintandquest-video-webm");
+                    video.pause()
+                    console.log("zzz")
+                    if (video.pause) {
+                        video.play();
+                    } else {
+                        video.pause();
+                    }
+                  });
+              });
+          },
+        });
+      };
+    </script>
+
+  </head>
+
+  <body>
+    <div class="app">
+      <div class="example-container">
+        <div id="example-scanning-overlay" class="hidden">
+          <div class="inner">
+            <img src="./assets/QR.png" />
+            <div class="scanline"></div>
+          </div>
+        </div>
+        <a-scene
+          mindar-image="imageTargetSrc:./assets/qrTarget.mind;showStats: false; uiScanning: #example-scanning-overlay;"
+          color-space="sRGB"
+          renderer="colorManagement: true, physicallyCorrectLights"
+          vr-mode-ui="enabled: false"
+          device-orientation-permission-ui="enabled: false"
+        >
+          <a-assets>
+            <img id="icon-play" src="./assets/play.png" />
+            <img id="icon-left" src="./assets/left-arrow.png" />
+            <img id="icon-right" src="./assets/right-arrow.png" />
+            <img id="icon-detail" src="./assets/burger.png" />
+  
+            <video
+              id="paintandquest-video-webm"
+              loop="false"
+              autoplay="false"
+            ></video>
+  
+          </a-assets>
+          <a-camera
+            position="0 0 0"
+            look-controls="enabled: false"
+            cursor="fuse: false; rayOrigin: mouse;"
+            raycaster="far: 10000; objects: .clickable"
+          ></a-camera>
+          <a-entity
+            id="entite"
+            mytarget
+            mindar-image-target="targetIndex:0"
+            transparent="true"
+            gesture-detector
+          >
+            <!-- <a-sphere position="0 0 0" radius="0.25" color="#EF2D5E"></a-sphere> -->
+            <a-text id="videoDescrip" class="description"></a-text>
+            <a-entity id="portfolio-panel" position="0 0 0">
+              <a-entity
+                align="center"
+                width="2"
+                position="0 0 0">
+                <a-text
+                id="menuName"
+                value="Menu"
+                color="black"
+                align="right"
+                width="1"
+                height="0.15"
+                position="0.20 0.6 0"
+                ></a-text>
+                <a-image 
+                    id="menuDetail"
+                    src="#icon-detail"
+                    align="left"
+                    height="0.15"
+                    width="0.15"
+                    class="clickable"
+                    position="0.52 0.6 0"
+                >
+              </a-entity>
+              <a-entity id="portfolio-item0">
+                <a-video
+                  id="water"
+                  width="1.1375"
+                  height="1"
+                  position="0 0 0"
+                  webkit-playsinline
+                  playsinline
+                ></a-video>
+                <a-plane
+                  id="paintandquest-preview-button"
+                  class="clickable"
+                  alpha-test="0.5"
+                  position="0 0 0"
+                  height="1"
+                  width="1.1375"
+                  opacity="0.7"
+                  color="black"
+                ></a-plane>
+                <!-- <a-image
+                  id="playicon"
+                  class="clickable"
+                  src="#icon-play"
+                  alpha-test="0.5"
+                  position="0 0 0"
+                  opacity="0.9"
+                  height="0.15"
+                  width="0.15"
+                > -->
+              </a-entity>
+              <a-image
+                visible="false"
+                id="portfolio-left-button"
+                class="clickable"
+                src="#icon-left"
+                position="-0.7 0 0"
+                height="0.05"
+                width="0.015"
+              ></a-image>
+              <a-image
+                visible="false"
+                id="portfolio-right-button"
+                class="clickable"
+                src="#icon-right"
+                position="0.7 0 0"
+                height="0.15"
+                width="0.15"
+              ></a-image>
+            </a-entity>
+          </a-entity>
+        </a-scene>
+        <div class="boxList" id="list"></div>
+      </div>
+    </div>
+    <script src="main.bundle.js"></script>
+  </body>
+</html>
