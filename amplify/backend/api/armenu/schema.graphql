@@ -9,6 +9,7 @@ type Restaurant @model {
   email: AWSEmail!
   localisation: String
   contact:  AWSPhone!
+  categories:[Category!]
   
   menus: [Menu] @hasMany
 },
@@ -21,7 +22,9 @@ type Menu @model {
   image: [File]
   video: [File]
   ingredients: [Ingredient]
+  categoryID: ID! 
   category: Category!
+  restaurant: Restaurant! @belongsTo
 }
 
 type Ingredient {
@@ -30,8 +33,9 @@ type Ingredient {
 }
 
 type Category {
+  id: ID!
+  parentID: ID
   name: String!
-  subCategory: [Category!]
 }
 
 type File {

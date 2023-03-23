@@ -10,12 +10,48 @@ export const getRestaurant = /* GraphQL */ `
       email
       localisation
       contact
+      categories {
+        id
+        parentID
+        name
+      }
       menus {
         items {
           id
           name
           price
           description
+          image {
+            type
+            height
+            width
+            path
+          }
+          video {
+            type
+            height
+            width
+            path
+          }
+          ingredients {
+            name
+          }
+          categoryID
+          category {
+            id
+            parentID
+            name
+          }
+          restaurant {
+            id
+            name
+            adresse
+            email
+            localisation
+            contact
+            createdAt
+            updatedAt
+          }
           createdAt
           updatedAt
           restaurantMenusId
@@ -41,7 +77,22 @@ export const listRestaurants = /* GraphQL */ `
         email
         localisation
         contact
+        categories {
+          id
+          parentID
+          name
+        }
         menus {
+          items {
+            id
+            name
+            price
+            description
+            categoryID
+            createdAt
+            updatedAt
+            restaurantMenusId
+          }
           nextToken
         }
         createdAt
@@ -79,11 +130,39 @@ export const getMenu = /* GraphQL */ `
           path
         }
       }
+      categoryID
       category {
+        id
+        parentID
         name
-        subCategory {
+      }
+      restaurant {
+        id
+        name
+        adresse
+        email
+        localisation
+        contact
+        categories {
+          id
+          parentID
           name
         }
+        menus {
+          items {
+            id
+            name
+            price
+            description
+            categoryID
+            createdAt
+            updatedAt
+            restaurantMenusId
+          }
+          nextToken
+        }
+        createdAt
+        updatedAt
       }
       createdAt
       updatedAt
@@ -117,9 +196,36 @@ export const listMenus = /* GraphQL */ `
         }
         ingredients {
           name
+          image {
+            type
+            height
+            width
+            path
+          }
         }
+        categoryID
         category {
+          id
+          parentID
           name
+        }
+        restaurant {
+          id
+          name
+          adresse
+          email
+          localisation
+          contact
+          categories {
+            id
+            parentID
+            name
+          }
+          menus {
+            nextToken
+          }
+          createdAt
+          updatedAt
         }
         createdAt
         updatedAt

@@ -13,12 +13,48 @@ export const createRestaurant = /* GraphQL */ `
       email
       localisation
       contact
+      categories {
+        id
+        parentID
+        name
+      }
       menus {
         items {
           id
           name
           price
           description
+          image {
+            type
+            height
+            width
+            path
+          }
+          video {
+            type
+            height
+            width
+            path
+          }
+          ingredients {
+            name
+          }
+          categoryID
+          category {
+            id
+            parentID
+            name
+          }
+          restaurant {
+            id
+            name
+            adresse
+            email
+            localisation
+            contact
+            createdAt
+            updatedAt
+          }
           createdAt
           updatedAt
           restaurantMenusId
@@ -42,12 +78,48 @@ export const updateRestaurant = /* GraphQL */ `
       email
       localisation
       contact
+      categories {
+        id
+        parentID
+        name
+      }
       menus {
         items {
           id
           name
           price
           description
+          image {
+            type
+            height
+            width
+            path
+          }
+          video {
+            type
+            height
+            width
+            path
+          }
+          ingredients {
+            name
+          }
+          categoryID
+          category {
+            id
+            parentID
+            name
+          }
+          restaurant {
+            id
+            name
+            adresse
+            email
+            localisation
+            contact
+            createdAt
+            updatedAt
+          }
           createdAt
           updatedAt
           restaurantMenusId
@@ -71,12 +143,48 @@ export const deleteRestaurant = /* GraphQL */ `
       email
       localisation
       contact
+      categories {
+        id
+        parentID
+        name
+      }
       menus {
         items {
           id
           name
           price
           description
+          image {
+            type
+            height
+            width
+            path
+          }
+          video {
+            type
+            height
+            width
+            path
+          }
+          ingredients {
+            name
+          }
+          categoryID
+          category {
+            id
+            parentID
+            name
+          }
+          restaurant {
+            id
+            name
+            adresse
+            email
+            localisation
+            contact
+            createdAt
+            updatedAt
+          }
           createdAt
           updatedAt
           restaurantMenusId
@@ -119,11 +227,39 @@ export const createMenu = /* GraphQL */ `
           path
         }
       }
+      categoryID
       category {
+        id
+        parentID
         name
-        subCategory {
+      }
+      restaurant {
+        id
+        name
+        adresse
+        email
+        localisation
+        contact
+        categories {
+          id
+          parentID
           name
         }
+        menus {
+          items {
+            id
+            name
+            price
+            description
+            categoryID
+            createdAt
+            updatedAt
+            restaurantMenusId
+          }
+          nextToken
+        }
+        createdAt
+        updatedAt
       }
       createdAt
       updatedAt
@@ -162,11 +298,39 @@ export const updateMenu = /* GraphQL */ `
           path
         }
       }
+      categoryID
       category {
+        id
+        parentID
         name
-        subCategory {
+      }
+      restaurant {
+        id
+        name
+        adresse
+        email
+        localisation
+        contact
+        categories {
+          id
+          parentID
           name
         }
+        menus {
+          items {
+            id
+            name
+            price
+            description
+            categoryID
+            createdAt
+            updatedAt
+            restaurantMenusId
+          }
+          nextToken
+        }
+        createdAt
+        updatedAt
       }
       createdAt
       updatedAt
@@ -205,11 +369,39 @@ export const deleteMenu = /* GraphQL */ `
           path
         }
       }
+      categoryID
       category {
+        id
+        parentID
         name
-        subCategory {
+      }
+      restaurant {
+        id
+        name
+        adresse
+        email
+        localisation
+        contact
+        categories {
+          id
+          parentID
           name
         }
+        menus {
+          items {
+            id
+            name
+            price
+            description
+            categoryID
+            createdAt
+            updatedAt
+            restaurantMenusId
+          }
+          nextToken
+        }
+        createdAt
+        updatedAt
       }
       createdAt
       updatedAt

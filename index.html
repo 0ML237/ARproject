@@ -17,8 +17,8 @@
     <!-- <script src="src/ARapp1/video/menu/plat1.mp4"></script> -->
     <script>
       window.onload = async function () {
-        const menuItems1 = await getMenuItems1();
-        const menuItems = getMenuItems();
+        const menuItems = await getMenuItems();
+        //const menuItems = getMenuItems();
 
         let currenMenuItem = 0;
         let currentProduitIndex = 0;
@@ -33,7 +33,7 @@
 
         const assets = document.querySelectorAll("a-assets");
         const liste = document.querySelector("#list");
-        const platArea = menuItems[0];
+        const platArea = menuItems[0].produit[0].plats;
         renderCurrentPlat(currentPlatIndex);
         menuItems.forEach((menu) =>
           renderMenuItem(menu, liste, descriptionElement, (selectedProduit) => {
@@ -51,6 +51,24 @@
             renderCurrentPlat((currentPlatIndex = 0));
           })
         );
+        /*const platArea = menuItems[0];
+        renderCurrentPlat(currentPlatIndex);
+        menuItems.forEach((menu) =>
+          renderMenuItem(menu, liste, descriptionElement, (selectedProduit) => {
+            platArea.splice(
+              0,
+              platArea.length,
+              ...menuItems
+                .map((menuItem) => menuItem.produit)
+                .reduce((results, produits) => [...results, ...produits], [])
+                .filter((produit) => selectedProduit.name === produit.name)
+                .map((produit) => produit.plats)
+                .reduce((results, plats) => [...results, ...plats], [])
+            );
+            //currentPlatIndex = 0;
+            renderCurrentPlat((currentPlatIndex = 0));
+          })
+        );*/
 
         function renderCurrentPlat(index) {
           v.setAttribute("src", platArea[index].src);
